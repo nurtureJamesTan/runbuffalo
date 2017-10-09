@@ -8,8 +8,14 @@ RUN apk update \
 # ==========================================
 # ssh
 # thanks to https://hub.docker.com/r/gotechnies/alpine-ssh
-RUN apk --update add --no-cache bash \
+RUN apk --update add --no-cache bash vim curl\
   && rm -rf /var/cache/apk/*
+
+RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
+    apk update && \
+    curl -o /usr/local/bin/gosu -sSL "https://github.com/tianon/gosu/releases/download/1.2/gosu-amd64" && \
+    chmod +x /usr/local/bin/gosu && \
+    rm -rf /var/cache/apk/*
 
 RUN adduser -h /home/app -D -s /bin/bash -g app,sudo app
 RUN mkdir -p /home/app/web/log
