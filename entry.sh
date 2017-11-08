@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "runbuffalo v1.0.9"
+echo "runbuffalo v1.0.10"
 
 export APPDIR=/home/app/web
 cd $APPDIR
@@ -10,10 +10,12 @@ else
 fi;
 
 echo "preparing tmp..."
+pwd
 gosu app mkdir -p $APPDIR/tmp
+gosu app mkdir -p $APPDIR/log
 echo "migration & seeds..."
-gosu app bin/heroku migrate >> log/$GO_ENV.log
-gosu app bin/heroku t db:seed >> log/$GO_ENV.log
+gosu app bin/heroku migrate >> $APPDIR/log/$GO_ENV.log
+gosu app bin/heroku t db:seed >> $APPDIR/log/$GO_ENV.log
 # pkill heroku
 echo "Starting up $GO_ENV..."
-gosu app $@ >> log/out.log
+gosu app $@ >> $APPDIR/log/out.log
