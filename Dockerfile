@@ -31,6 +31,8 @@ RUN chmod a+x /home/app/entry.sh
 WORKDIR /home/app/web
 ENTRYPOINT ["/home/app/entry.sh"]
 
+ENV MIGRATE 1
+
 VOLUME ["/home/app"]
 EXPOSE 3000
 
