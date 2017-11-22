@@ -32,6 +32,7 @@ WORKDIR /home/app/web
 ENTRYPOINT ["/home/app/entry.sh"]
 
 ENV MIGRATE 1
+ENV CRON 0
 
 VOLUME ["/home/app"]
 EXPOSE 3000

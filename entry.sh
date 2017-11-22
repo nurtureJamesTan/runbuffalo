@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "runbuffalo v1.1.0"
+echo "runbuffalo v1.2.1"
 
 export APPDIR=/home/app/web
 cd $APPDIR
@@ -20,6 +20,14 @@ gosu app bin/heroku migrate >> $APPDIR/log/$GO_ENV.log
 gosu app bin/heroku t db:seed >> $APPDIR/log/$GO_ENV.log
 fi
 
-# pkill heroku
-echo "Starting up $GO_ENV..."
-gosu app $@ >> $APPDIR/log/out.log
+if [[ "$CRON" -eq 1 ]]; then
+	echo "CRON $GO_ENV..."
+	cat /home/app/web/cron_task.sh
+	cat /home/app/web/cron_task.sh >> /var/spool/cron/crontabs/root
+	crond -l 2 -f
+else
+	# pkill heroku
+	echo "Runing $GO_ENV: $@"
+	gosu app $@ >> $APPDIR/log/out.log
+fi
+
