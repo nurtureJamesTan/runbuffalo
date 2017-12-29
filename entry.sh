@@ -1,9 +1,9 @@
 #!/bin/sh
-echo "runbuffalo v1.2.1"
+echo "runbuffalo v1.2.3"
 
 export APPDIR=/home/app/web
 cd $APPDIR
-if [ ! -f $APPDIR/env.sh ]; then
+if [ -f $APPDIR/stg-docker-private-env.sh ]; then
   source $APPDIR/stg-docker-private-env.sh
 else
 	source $APPDIR/env.sh

@@ -23,13 +23,13 @@ RUN mkdir -p /home/app/.ssh
 RUN touch /home/app/.ssh/authorized_keys
 RUN chmod 600 /home/app/.ssh/authorized_keys
 RUN chmod 700 /home/app/.ssh
-RUN chown app:app -R /home/app
+#RUN chown app:app -R /home/app
 
-COPY entry.sh /home/app/
-RUN chmod a+x /home/app/entry.sh
+COPY entry.sh /home/
+RUN chmod a+x /home/entry.sh
 
 WORKDIR /home/app/web
-ENTRYPOINT ["/home/app/entry.sh"]
+ENTRYPOINT ["/home/entry.sh"]
 
 ENV MIGRATE 1
 ENV CRON 0
