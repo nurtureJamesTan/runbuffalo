@@ -17,7 +17,8 @@ RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/reposito
     chmod +x /usr/local/bin/gosu && \
     rm -rf /var/cache/apk/*
 
-RUN adduser -h /home/app -D -s /bin/bash -g app,sudo app
+RUN adduser dummy1 -D
+RUN adduser -u 1002 -h /home/app -D -s /bin/bash -g app,sudo app
 RUN mkdir -p /home/app/web/log
 RUN mkdir -p /home/app/.ssh
 RUN touch /home/app/.ssh/authorized_keys
