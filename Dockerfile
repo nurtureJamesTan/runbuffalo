@@ -18,6 +18,7 @@ RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/reposito
     rm -rf /var/cache/apk/*
 
 RUN adduser dummy1 -D
+RUN addgroup dummy2
 RUN adduser -u 1002 -h /home/app -D -s /bin/bash -g app,sudo app
 RUN mkdir -p /home/app/web/log
 RUN mkdir -p /home/app/.ssh
