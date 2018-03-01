@@ -24,7 +24,7 @@ if [[ "$CRON" -eq 1 ]]; then
 	echo "CRON $GO_ENV..."
 	cat /home/app/web/cron_task.sh
 
-	COPY cron_task.sh /var/spool/cron/crontabs/root
+	cp -rf /home/app/web/cron_task.sh /var/spool/cron/crontabs/root
 	crond -l 2 -f
 else
 	# pkill heroku
