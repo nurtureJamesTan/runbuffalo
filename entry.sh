@@ -29,6 +29,8 @@ if [[ "$CRON" -eq 1 ]]; then
 else
 	# pkill heroku
 	echo "Runing $GO_ENV: $@"
+	ls -lath /home/app/web
+	ls -lath /home/app/web/bin
 	gosu app $@ >> $APPDIR/log/out.log
 fi
 
