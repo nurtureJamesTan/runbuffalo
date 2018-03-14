@@ -26,11 +26,12 @@ if [[ "$CRON" -eq 1 ]]; then
 
 	cp -rf /home/app/web/cron_task.sh /var/spool/cron/crontabs/root
 	crond -l 2 -f
+elif [[ $@ -eq "bash" ]]; then
+	echo "entering bash"
+	bash -l
 else
 	# pkill heroku
-	echo "Runing $GO_ENV: $@"
-	ls -lath /home/app/web
-	ls -lath /home/app/web/bin
-	gosu app $@ >> $APPDIR/log/out.log
+	echo "Runing $GO_ENV: $@, UID $UID"
+	gosu app $@
 fi
 
