@@ -15,7 +15,8 @@ pwd
 mkdir -p $APPDIR/tmp
 mkdir -p $APPDIR/log
 chown app -R $APPDIR/tmp $APPDIR/log
-# echo "migration & seeds..."
+mkdir -p /go/src
+ln -s /home/app/web /go/src/ossdc
 
 if [ "$@" = "bash" ]; then
 	echo "entering bash"
@@ -23,6 +24,7 @@ if [ "$@" = "bash" ]; then
 	exit 0
 fi
 
+# echo "migration & seeds..."
 if [ "$MIGRATE" -eq 1 ]; then
 	echo "db migrate and db:seed..."
 	exec su app -c "bin/heroku migrate" >> $APPDIR/log/$GO_ENV.log
