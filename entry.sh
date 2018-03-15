@@ -1,37 +1,43 @@
 #!/bin/sh
-echo "runbuffalo v1.2.3"
+echo "runbuffalo v1.3.0"
 
 export APPDIR=/home/app/web
 cd $APPDIR
 if [ -f $APPDIR/stg-docker-private-env.sh ]; then
-  source $APPDIR/stg-docker-private-env.sh
+	. $APPDIR/stg-docker-private-env.sh
 else
-	source $APPDIR/env.sh
+	. $APPDIR/env.sh
 fi;
 
 echo "preparing tmp..."
 pwd
-gosu app mkdir -p $APPDIR/tmp
-gosu app mkdir -p $APPDIR/log
+
+mkdir -p $APPDIR/tmp
+mkdir -p $APPDIR/log
+chown app -R $APPDIR/tmp $APPDIR/log
 # echo "migration & seeds..."
 
-if [[ "$MIGRATE" -eq 1 ]]; then
-gosu app bin/heroku migrate >> $APPDIR/log/$GO_ENV.log
-gosu app bin/heroku t db:seed >> $APPDIR/log/$GO_ENV.log
+if [ "$@" = "bash" ]; then
+	echo "entering bash"
+	bash -l
+	exit 0
 fi
 
-if [[ "$CRON" -eq 1 ]]; then
+if [ "$MIGRATE" -eq 1 ]; then
+	echo "db migrate and db:seed..."
+	exec su app -c "bin/heroku migrate" >> $APPDIR/log/$GO_ENV.log
+	exec su app -c "bin/heroku t db:seed" >> $APPDIR/log/$GO_ENV.log
+fi
+
+if [ "$CRON" -eq 1 ]; then
 	echo "CRON $GO_ENV..."
 	cat /home/app/web/cron_task.sh
 
 	cp -rf /home/app/web/cron_task.sh /var/spool/cron/crontabs/root
 	crond -l 2 -f
-elif [[ $@ -eq "bash" ]]; then
-	echo "entering bash"
-	bash -l
 else
 	# pkill heroku
 	echo "Runing $GO_ENV: $@, UID $UID"
-	gosu app $@
+	exec su app -c "$@"
 fi
 

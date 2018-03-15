@@ -1,30 +1,23 @@
-FROM alpine:3.6
+FROM debian:stretch
 MAINTAINER James <c00lways@gmail.com>
 
-RUN apk update \
-  &&  apk add ca-certificates wget \
+RUN apt-get update\
+  &&  apt-get install -y ca-certificates wget \
   && update-ca-certificates
 
 # ==========================================
 # ssh
 # thanks to https://hub.docker.com/r/gotechnies/alpine-ssh
-RUN apk --update add --no-cache bash vim curl\
-  && rm -rf /var/cache/apk/*
+RUN apt-get install -y vim curl
 
-RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
-    apk update && \
-    curl -o /usr/local/bin/gosu -sSL "https://github.com/tianon/gosu/releases/download/1.2/gosu-amd64" && \
-    chmod +x /usr/local/bin/gosu && \
-    rm -rf /var/cache/apk/*
+RUN useradd dummy1
+RUN useradd dummy2
+RUN useradd -u 1002 -d /home/app -s /bin/bash -G sudo app
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-RUN adduser dummy1 -D
-RUN addgroup dummy2
-RUN adduser -u 1002 -h /home/app -D -s /bin/bash -g app,sudo app
-RUN mkdir -p /home/app/web/log
-RUN mkdir -p /home/app/.ssh
+RUN mkdir -p /home/app/web/log && mkdir -p /home/app/.ssh
 RUN touch /home/app/.ssh/authorized_keys
-RUN chmod 600 /home/app/.ssh/authorized_keys
-RUN chmod 700 /home/app/.ssh
+RUN chmod 600 /home/app/.ssh/authorized_keys && chmod 700 /home/app/.ssh
 #RUN chown app:app -R /home/app
 
 COPY entry.sh /home/
