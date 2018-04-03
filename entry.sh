@@ -37,9 +37,11 @@ if [ "$CRON" -eq 1 ]; then
 	if [ "$GO_ENV" = "production" ]; then
 		echo "4:CRON $GO_ENV..."
 		cat /home/app/web/cron_task.sh
-		cp -rf /home/app/web/cron_task.sh /var/spool/cron/crontabs/root
+		cp -rf /home/app/web/cron_task.sh /etc/cron.d/web-cron
 		echo "starting crond..."
-		crond -l 2
+		crontab /etc/cron.d/web-cron
+		cron -f
+		# todo set to non foreground without -f
 	fi
 	echo "starting twitter:update"
 	bin/heroku t twitter:update

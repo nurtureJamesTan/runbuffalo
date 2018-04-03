@@ -8,7 +8,7 @@ RUN apt-get update\
 # ==========================================
 # ssh
 # thanks to https://hub.docker.com/r/gotechnies/alpine-ssh
-RUN apt-get install -y vim curl
+RUN apt-get install -y vim curl cron
 
 RUN useradd dummy1
 RUN useradd dummy2
