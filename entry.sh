@@ -40,8 +40,8 @@ if [ "$CRON" -eq 1 ]; then
 		cp -rf /home/app/web/cron_task.sh /etc/cron.d/web-cron
 		echo "starting crond..."
 		crontab /etc/cron.d/web-cron
-		cron -f
-		# todo set to non foreground without -f
+		# cron -f# set to foreground
+		cron
 	fi
 	echo "starting twitter:update"
 	bin/heroku t twitter:update
