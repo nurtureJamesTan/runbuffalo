@@ -38,13 +38,14 @@ if [ "$CRON" -eq 1 ]; then
 		echo "4:CRON $GO_ENV..."
 		cat /home/app/web/cron_task.sh
 		cp -rf /home/app/web/cron_task.sh /etc/cron.d/web-cron
-		echo "starting crond..."
-		crontab /etc/cron.d/web-cron
-		cron -f
-		# todo set to non foreground without -f
+		# echo "starting crond..."
+		# crontab /etc/cron.d/web-cron
+		# cron -f# set to foreground
+		# cron
 	fi
-	echo "starting twitter:update"
-	bin/heroku t twitter:update
+	echo "starting bg:run"
+	# bin/heroku t twitter:update
+	bin/heroku t bg:run
 else
 	# pkill heroku
 	echo "4:Runing $GO_ENV: $@, UID $UID"
